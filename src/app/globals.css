@@ -10,6 +10,10 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-inter: var(--font-inter);
+  --font-adamina: var(--font-adamina);
+  --font-abhaya-libre: var(--font-abhaya-libre);
+  --font-arapey: var(--font-arapey);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,4 +27,30 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Custom font classes matching Figma design */
+.font-inter-medium {
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 500;
+}
+
+.font-adamina-regular {
+  font-family: var(--font-adamina), serif;
+  font-weight: 400;
+}
+
+.font-abhaya-libre-bold {
+  font-family: var(--font-abhaya-libre), serif;
+  font-weight: 700;
+}
+
+.font-abhaya-libre-regular {
+  font-family: var(--font-abhaya-libre), serif;
+  font-weight: 400;
+}
+
+.font-arapey-regular {
+  font-family: var(--font-arapey), serif;
+  font-weight: 400;
 }
