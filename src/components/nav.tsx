@@ -1,53 +1,47 @@
 import Image from "next/image";
-import tablerCheck from "../../assets/tabler_check.svg";
-import lucideGoal from "../../assets/lucide_goal.svg";
-import iconamoonProfile from "../../assets/iconamoon_profile.svg";
+import checkIcon from "../../assets/check-icon.svg";
+import flagIcon from "../../assets/flag-icon.svg";
+import profileIcon from "../../assets/profile-icon.svg";
 
 interface NavProps {
   className?: string;
   tab?: "Completed" | "Goals" | "Profile";
 }
 
-export default function Nav({ tab = "Completed" }: NavProps) {
-  const tablerCheckIcon = (
-    <Image alt="Check icon" src={tablerCheck} width={24} height={24} />
-  );
-  
-  const lucideGoalIcon = (
-    <Image alt="Goal icon" src={lucideGoal} width={24} height={24} />
-  );
-  
-  const profileIcon = (
-    <Image alt="Profile icon" src={iconamoonProfile} width={24} height={24} />
-  );
+export default function Nav({ tab = "Goals" }: NavProps) {
+  const isActive = (currentTab: string) => currentTab === tab;
 
-  if (tab === "Goals") {
-    return (
-      <div className="flex gap-4 h-[74px] items-center justify-center p-2.5">
-        <button className="bg-white rounded-xl p-2.5 opacity-90">
-          {tablerCheckIcon}
-        </button>
-        <button className="bg-white rounded-xl px-5 py-4">
-          {lucideGoalIcon}
-        </button>
-        <button className="bg-white rounded-xl p-2.5 opacity-90">
-          {profileIcon}
-        </button>
-      </div>
-    );
-  }
-  
   return (
-    <div className="flex gap-4 h-[74px] items-center justify-center p-2.5">
-      <button className="bg-white rounded-xl px-5 py-4">
-        {tablerCheckIcon}
+    <nav className="flex gap-4 items-center justify-center p-2.5">
+      <button 
+        className={isActive("Completed") 
+          ? "border-4 border-white px-5 py-4" 
+          : "border-2 border-white p-2.5"
+        }
+        aria-label="Completed goals"
+      >
+        <Image alt="" src={checkIcon} width={24} height={24} />
       </button>
-      <button className="bg-white rounded-xl p-2.5 opacity-90">
-        {lucideGoalIcon}
+
+      <button 
+        className={isActive("Goals") 
+          ? "border-4 border-white px-5 py-4" 
+          : "border-2 border-white p-2.5"
+        }
+        aria-label="Goals"
+      >
+        <Image alt="" src={flagIcon} width={24} height={24} />
       </button>
-      <button className="bg-white rounded-xl p-2.5 opacity-90">
-        {profileIcon}
+
+      <button 
+        className={isActive("Profile") 
+          ? "border-4 border-white px-5 py-4" 
+          : "border-2 border-white p-2.5"
+        }
+        aria-label="Profile"
+      >
+        <Image alt="" src={profileIcon} width={24} height={24} />
       </button>
-    </div>
+    </nav>
   );
 }

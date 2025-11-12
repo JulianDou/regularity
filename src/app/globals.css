@@ -14,6 +14,7 @@
   --font-adamina: var(--font-adamina);
   --font-abhaya-libre: var(--font-abhaya-libre);
   --font-arapey: var(--font-arapey);
+  --font-pixelify-sans: var(--font-pixelify-sans);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -53,4 +54,8 @@ body {
 .font-arapey-regular {
   font-family: var(--font-arapey), serif;
   font-weight: 400;
+}
+
+.font-pixelify-sans {
+  font-family: var(--font-pixelify-sans), sans-serif;
 }

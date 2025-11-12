@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter, Adamina, Abhaya_Libre, Arapey } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Adamina, Abhaya_Libre, Arapey, Pixelify_Sans } from "next/font/google";
 import Image from "next/image";
 import "./globals.css";
 
@@ -45,6 +45,12 @@ const arapey = Arapey({
   weight: "400",
 });
 
+const pixelifySans = Pixelify_Sans({
+  variable: "--font-pixelify-sans",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
 export const metadata: Metadata = {
   title: "HabitTracker - Mes Objectifs",
   description: "Suivez vos habitudes et objectifs quotidiens avec HabitTracker. Visualisez votre progression et restez motivé.",
@@ -65,7 +71,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${adamina.variable} ${abhayaLibre.variable} ${arapey.variable} antialiased h-full`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${adamina.variable} ${abhayaLibre.variable} ${arapey.variable} ${pixelifySans.variable} antialiased h-full`}
       >
         {/* Mobile smartphone UI wrapper - hidden on desktop */}
         <div className="bg-[#444444] flex flex-col h-full">
