@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import Nav from "@/components/nav";
-import rocketImg from "../../assets/rocket.png";
-import profile1 from "../../assets/profile1.png";
-import profile2 from "../../assets/profile2.png";
+import rocketImg from "../../assets/rocket-vector.svg";
+import planetImg from "../../assets/planet-vector.svg";
+import flagImg from "../../assets/flag-vector.svg";
 import chevronLeft from "../../assets/chevron-left.svg";
 import chevronRight from "../../assets/chevron-right.svg";
 import { Goal } from "@/app/lib/definitions";
-import { advanceGoal } from "@/app/lib/actions";
+import { advanceGoal, resetGoal } from "@/app/lib/actions";
+import { useRouter } from "next/navigation";
 
 interface GoalWithProgress extends Goal {
   currentDays: number;
@@ -23,16 +25,24 @@ interface GoalViewProps {
 }
 
 export default function GoalView({ goals }: GoalViewProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentGoalId, setCurrentGoalId] = useState(goals[0]?.id);
   const [isAdvancing, setIsAdvancing] = useState(false);
-  const currentGoal = goals[currentIndex];
+  
+  // Find current goal by ID, fallback to first goal if not found
+  const currentIndex = goals.findIndex(g => g.id === currentGoalId);
+  const actualIndex = currentIndex >= 0 ? currentIndex : 0;
+  const currentGoal = goals[actualIndex];
+  
+  const router = useRouter();
 
   const handlePrevious = () => {
-    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : goals.length - 1));
+    const newIndex = actualIndex > 0 ? actualIndex - 1 : goals.length - 1;
+    setCurrentGoalId(goals[newIndex].id);
   };
 
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev < goals.length - 1 ? prev + 1 : 0));
+    const newIndex = actualIndex < goals.length - 1 ? actualIndex + 1 : 0;
+    setCurrentGoalId(goals[newIndex].id);
   };
 
   const handleAdvance = async () => {
@@ -46,10 +56,21 @@ export default function GoalView({ goals }: GoalViewProps) {
     }
   };
 
+  const handleReset = async () => {
+    setIsAdvancing(true);
+    try {
+      await resetGoal(currentGoal.id);
+    } catch (error) {
+      console.error("Failed to reset goal:", error);
+    } finally {
+      setIsAdvancing(false);
+    }
+  }
+
   return (
     <div className="bg-black flex flex-col gap-2.5 p-2.5 w-full h-full">
       {/* Header */}
-      <header className="p-2.5">
+      <header className="flex items-center justify-between p-2.5">
         <h1 className="text-2xl text-white font-pixelify-sans">
           Mes objectifs
         </h1>
@@ -60,11 +81,11 @@ export default function GoalView({ goals }: GoalViewProps) {
         {/* Progress Meter */}
         <aside className="flex flex-col items-center justify-between h-full gap-2.5">
           <Image
-            src={profile1}
-            alt="Profile top"
+            src={planetImg}
+            alt="Planet"
             width={50}
             height={50}
-            className="w-12 h-12 object-cover shrink-0"
+            className="w-12 h-12 shrink-0"
           />
 
           <div className="relative flex flex-col justify-end h-full w-12 border-l-[5px] border-b-[5px] border-t-[5px] border-white">
@@ -73,14 +94,17 @@ export default function GoalView({ goals }: GoalViewProps) {
               style={{ height: `${currentGoal.progress}%` }}
             >
               <div 
-                className="absolute top-0 right-0 flex items-center gap-1 transform translate-x-10"
+                className={`
+                  absolute -top-2 -left-3 flex items-center gap-1 transform -translate-y-full
+                  ${currentGoal.isComplete && "hidden"}
+                `}
               >
                 <Image
                   src={rocketImg}
                   alt="Rocket"
-                  width={45}
-                  height={48}
-                  className="w-10 h-10"
+                  width={32}
+                  height={44}
+                  className="w-8 h-11"
                 />
                 <span className="text-sm text-white font-pixelify-sans whitespace-nowrap">
                   {currentGoal.currentDays} {currentGoal.currentDays === 1 ? "jour" : "jours"}
@@ -97,11 +121,11 @@ export default function GoalView({ goals }: GoalViewProps) {
           </div>
 
           <Image
-            src={profile2}
-            alt="Profile bottom"
+            src={flagImg}
+            alt="Flag"
             width={50}
-            height={50}
-            className="w-12 h-12 object-cover shrink-0"
+            height={39}
+            className="w-12 h-10 shrink-0"
           />
         </aside>
 
@@ -129,15 +153,24 @@ export default function GoalView({ goals }: GoalViewProps) {
             </div>
           </div>
 
-          <button 
-            onClick={handleAdvance}
-            disabled={isAdvancing || currentGoal.isComplete}
-            className="bg-white py-2.5 px-4 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <span className="text-black font-pixelify-sans text-base">
-              {currentGoal.isComplete ? "Terminé !" : isAdvancing ? "..." : "Avancer"}
-            </span>
-          </button>
+          <div className="flex flex-col gap-2 md:flex-row-reverse justify-end">
+            <button
+              onClick={handleReset}
+              disabled={isAdvancing || currentGoal.isComplete}
+              className={`button-hollow ${currentGoal.isComplete && "hidden"} w-full`}
+            >
+              Réinitialiser
+            </button>
+            <button 
+              onClick={handleAdvance}
+              disabled={isAdvancing || currentGoal.isComplete}
+              className="button-fill w-full"
+            >
+              <span className="text-black font-pixelify-sans text-base">
+                {currentGoal.isComplete ? "Terminé !" : isAdvancing ? "..." : "Avancer"}
+              </span>
+            </button>
+          </div>
         </section>
       </main>
 
@@ -145,7 +178,7 @@ export default function GoalView({ goals }: GoalViewProps) {
       <nav className="flex items-center justify-between px-2.5">
         <button 
           onClick={handlePrevious}
-          className="flex items-center gap-1 p-2.5"
+          className="flex items-center gap-1 p-2.5 cursor-pointer"
           disabled={goals.length <= 1}
         >
           <Image src={chevronLeft} alt="" width={24} height={24} />
@@ -154,19 +187,26 @@ export default function GoalView({ goals }: GoalViewProps) {
 
         {goals.length > 1 && (
           <span className="text-white font-pixelify-sans text-sm">
-            {currentIndex + 1} / {goals.length}
+            {actualIndex + 1} / {goals.length}
           </span>
         )}
 
         <button 
           onClick={handleNext}
-          className="flex items-center gap-1 p-2.5"
+          className="flex items-center gap-1 p-2.5 cursor-pointer"
           disabled={goals.length <= 1}
         >
           <span className="text-white font-pixelify-sans text-base">Suivant</span>
           <Image src={chevronRight} alt="" width={24} height={24} />
         </button>
       </nav>
+
+      <button 
+        className="button-fill"
+        onClick={() => router.push('/new')}
+      >
+        <p className="text-center">Ajouter un objectif</p>
+      </button>
 
       <Nav tab="Goals" />
     </div>

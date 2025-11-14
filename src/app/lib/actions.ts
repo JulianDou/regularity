@@ -87,3 +87,34 @@ export async function deleteGoal(goalId: string) {
     return { success: false, error: "Failed to delete goal" };
   }
 }
+
+export async function createGoal(formData: {
+  title: string;
+  days: number;
+  owner: string;
+}) {
+  try {
+    const goalTimeInSeconds = formData.days * 24 * 60 * 60; // Convert days to seconds
+    
+    await sql`
+      INSERT INTO goals (id, title, owner, start_date, goal_time, progress, reset_date, complete, type)
+      VALUES (
+        gen_random_uuid(),
+        ${formData.title},
+        ${formData.owner},
+        CURRENT_TIMESTAMP,
+        ${goalTimeInSeconds},
+        0,
+        CURRENT_TIMESTAMP,
+        false,
+        0
+      )
+    `;
+    
+    revalidatePath('/');
+    return { success: true };
+  } catch (error) {
+    console.error("Error creating goal:", error);
+    return { success: false, error: "Failed to create goal" };
+  }
+}

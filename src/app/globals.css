@@ -59,3 +59,15 @@ body {
 .font-pixelify-sans {
   font-family: var(--font-pixelify-sans), sans-serif;
 }
+
+.button-fill {
+  @apply bg-white text-black font-pixelify-sans py-2.5 px-4 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.button-hollow {
+  @apply bg-transparent border-2 border-white text-white font-pixelify-sans py-2.5 px-4 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.input-field {
+  @apply flex-1 border-2 border-white bg-black text-white font-pixelify-sans text-base p-2.5 focus:outline-none focus:border-white;
+}

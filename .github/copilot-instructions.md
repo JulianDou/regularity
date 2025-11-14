@@ -17,7 +17,7 @@ This is a Next.js 14 habit tracking application with TypeScript, TailwindCSS, an
 
 ## Key Features
 - User registration/login with username and password
-- Goal creation with time tracking
-- Progress visualization with circular indicators
-- Goal reset and completion functionality
+- Goal creation with daily tracking
+- Progress visualization with vertical bar indicator
+- Goal reset and progress functionality
 - Profile management with avatar support
