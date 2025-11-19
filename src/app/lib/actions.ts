@@ -8,14 +8,23 @@ const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
 export async function advanceGoal(goalId: string) {
   try {
-    // Increment progress by 1 day
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+    
+    // Check if already completed today and increment if not
     const result = await sql`
       UPDATE goals 
       SET progress = progress + 1,
-          reset_date = CURRENT_TIMESTAMP
+          reset_date = CURRENT_TIMESTAMP,
+          completions = array_append(completions, ${today}::date)
       WHERE id = ${goalId}
+        AND NOT (${today}::date = ANY(completions))
       RETURNING progress, goal_time
     `;
+    
+    // If no rows were updated, it means the goal was already completed today
+    if (result.length === 0) {
+      return { success: false, error: "Already completed today" };
+    }
     
     // Check if goal is complete
     if (result.length > 0) {
@@ -46,7 +55,8 @@ export async function resetGoal(goalId: string) {
       UPDATE goals 
       SET progress = 0,
           start_date = CURRENT_TIMESTAMP,
-          reset_date = CURRENT_TIMESTAMP
+          reset_date = CURRENT_TIMESTAMP,
+          completions = '{}'
       WHERE id = ${goalId}
     `;
     
@@ -86,6 +96,33 @@ export async function deleteGoal(goalId: string) {
   } catch (error) {
     console.error("Error deleting goal:", error);
     return { success: false, error: "Failed to delete goal" };
+  }
+}
+
+export async function revertCompletion(goalId: string) {
+  try {
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+    
+    // Revert the progress and remove today from completions
+    const result = await sql`
+      UPDATE goals 
+      SET progress = GREATEST(0, progress - 1),
+          completions = array_remove(completions, ${today}::date)
+      WHERE id = ${goalId}
+        AND ${today}::date = ANY(completions)
+      RETURNING progress
+    `;
+    
+    // If no rows were updated, it means there was no completion today
+    if (result.length === 0) {
+      return { success: false, error: "No completion to revert today" };
+    }
+    
+    revalidatePath('/');
+    return { success: true };
+  } catch (error) {
+    console.error("Error reverting completion:", error);
+    return { success: false, error: "Failed to revert completion" };
   }
 }
 

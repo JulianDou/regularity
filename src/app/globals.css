@@ -35,7 +35,7 @@ body {
 }
 
 .button-fill {
-  @apply bg-white text-black text-center font-pixelify-sans py-2 px-4 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply bg-white border-2 border-white text-black text-center font-pixelify-sans py-2 px-4 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed;
 }
 
 .button-hollow {

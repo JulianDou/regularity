@@ -6,10 +6,11 @@ import ConfirmationPopup from "@/components/confirm-popup";
 import rocketImg from "../../assets/rocket-vector.svg";
 import planetImg from "../../assets/planet-vector.svg";
 import flagImg from "../../assets/flag-vector.svg";
+import planetFlagImg from "../../assets/planet-flag-vector.svg";
 import chevronLeft from "../../assets/chevron-left.svg";
 import chevronRight from "../../assets/chevron-right.svg";
 import { Goal } from "@/app/lib/definitions";
-import { advanceGoal, resetGoal, deleteGoal } from "@/app/lib/actions";
+import { advanceGoal, resetGoal, deleteGoal, revertCompletion } from "@/app/lib/actions";
 import { useRouter } from "next/navigation";
 
 interface GoalWithProgress extends Goal {
@@ -17,6 +18,7 @@ interface GoalWithProgress extends Goal {
   totalDays: number;
   progress: number;
   isComplete: boolean;
+  completedToday: boolean;
 }
 
 interface GoalViewProps {
@@ -44,6 +46,7 @@ export default function GoalView({ goals }: GoalViewProps) {
   const handleNext = () => {
     const newIndex = actualIndex < goals.length - 1 ? actualIndex + 1 : 0;
     setCurrentGoalId(goals[newIndex].id);
+    console.log(currentGoal);
   };
 
   const handleAdvance = async () => {
@@ -52,6 +55,17 @@ export default function GoalView({ goals }: GoalViewProps) {
       await advanceGoal(currentGoal.id);
     } catch (error) {
       console.error("Failed to advance goal:", error);
+    } finally {
+      setIsAdvancing(false);
+    }
+  };
+
+  const handleRevert = async () => {
+    setIsAdvancing(true);
+    try {
+      await revertCompletion(currentGoal.id);
+    } catch (error) {
+      console.error("Failed to revert completion:", error);
     } finally {
       setIsAdvancing(false);
     }
@@ -99,7 +113,7 @@ export default function GoalView({ goals }: GoalViewProps) {
   };
 
   return (
-    <div className="bg-black flex flex-col w-full h-full generic-bordered-container">
+    <div className="bg-black flex flex-col gap-4 w-full h-full generic-bordered-container">
       {showResetConfirm && (
         <ConfirmationPopup
           message="Êtes-vous sûr de vouloir réinitialiser cet objectif ?"
@@ -121,7 +135,7 @@ export default function GoalView({ goals }: GoalViewProps) {
         {/* Progress Meter */}
         <aside className="flex flex-col items-center justify-between gap-4 h-full ">
           <Image
-            src={planetImg}
+            src={currentGoal.isComplete ? planetFlagImg : planetImg}
             alt="Planet"
             width={50}
             height={50}
@@ -208,15 +222,39 @@ export default function GoalView({ goals }: GoalViewProps) {
             >
               Réinitialiser
             </button>
-            <button 
-              onClick={handleAdvance}
-              disabled={isAdvancing || currentGoal.isComplete}
-              className={`button-fill ${currentGoal.isComplete && "hidden"} w-full`}
-            >
-              <span className="text-black text-base">
-                {currentGoal.isComplete ? "Terminé !" : isAdvancing ? "..." : "Avancer"}
-              </span>
-            </button>
+            {!currentGoal.isComplete && (
+              currentGoal.completedToday ? (
+                <button 
+                  onClick={handleRevert}
+                  disabled={isAdvancing}
+                  className="button-hollow w-full"
+                >
+                  <span className="text-white text-base">
+                    {isAdvancing ? "..." : "Annuler"}
+                  </span>
+                </button>
+              ) : (
+                <button 
+                  onClick={handleAdvance}
+                  disabled={isAdvancing}
+                  className="button-fill w-full"
+                >
+                  <span className="text-black text-base">
+                    {isAdvancing ? "..." : "Avancer"}
+                  </span>
+                </button>
+              )
+            )}
+            {currentGoal.isComplete && (
+              <button 
+                disabled
+                className="button-fill w-full"
+              >
+                <span className="text-black text-base">
+                  Terminé !
+                </span>
+              </button>
+            )}
           </div>
         </section>
       </div>

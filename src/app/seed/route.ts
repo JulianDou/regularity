@@ -43,14 +43,15 @@ async function seedGoals() {
       progress INTEGER NOT NULL DEFAULT 0,
       reset_date DATE NOT NULL,
       complete BOOLEAN NOT NULL DEFAULT FALSE,
-      type INTEGER NOT NULL DEFAULT 0
+      type INTEGER NOT NULL DEFAULT 0,
+      completions DATE[] DEFAULT '{}'
     );
   `;
 
   // Insert goals
   const insertedGoals = await Promise.all(
     goals.map((goal) => sql`
-      INSERT INTO goals (id, title, owner, start_date, goal_time, progress, reset_date, complete, type)
+      INSERT INTO goals (id, title, owner, start_date, goal_time, progress, reset_date, complete, type, completions)
       VALUES (
         ${goal.id}, 
         ${goal.title}, 
@@ -60,7 +61,8 @@ async function seedGoals() {
         ${goal.progress},
         ${goal.reset_date},
         ${goal.complete},
-        ${goal.type}
+        ${goal.type},
+        '{}'
       )
       ON CONFLICT (id) DO NOTHING;
     `),

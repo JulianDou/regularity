@@ -14,6 +14,7 @@ export type Goal = {
   reset_date: string;
   complete: boolean;
   type: number;
+  completions: string[];
 }
 
 export type SessionUser = {

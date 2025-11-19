@@ -69,10 +69,19 @@ export function calculateGoalProgress(goal: Goal) {
   const totalDays = Math.ceil(goal.goal_time / (60 * 60 * 24)); // Convert seconds to days
   const progressPercentage = Math.min(100, Math.round((currentDays / totalDays) * 100));
   
+  // Check if completed today
+  const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+  const completedToday = goal.completions?.some(date => {
+    // Normalize the date from database (could be timestamp or date string)
+    const normalizedDate = new Date(date).toISOString().split('T')[0];
+    return normalizedDate === today;
+  }) || false;
+  
   return {
     currentDays,
     totalDays,
     progress: progressPercentage,
     isComplete: currentDays >= totalDays,
+    completedToday,
   };
 }
