@@ -3,13 +3,14 @@
 import { useState } from "react";
 import Image from "next/image";
 import Nav from "@/components/nav";
+import ConfirmationPopup from "@/components/confirm-popup";
 import rocketImg from "../../assets/rocket-vector.svg";
 import planetImg from "../../assets/planet-vector.svg";
 import flagImg from "../../assets/flag-vector.svg";
 import chevronLeft from "../../assets/chevron-left.svg";
 import chevronRight from "../../assets/chevron-right.svg";
 import { Goal } from "@/app/lib/definitions";
-import { advanceGoal, resetGoal } from "@/app/lib/actions";
+import { advanceGoal, resetGoal, deleteGoal } from "@/app/lib/actions";
 import { useRouter } from "next/navigation";
 
 interface GoalWithProgress extends Goal {
@@ -26,6 +27,8 @@ interface GoalViewProps {
 export default function GoalView({ goals }: GoalViewProps) {
   const [currentGoalId, setCurrentGoalId] = useState(goals[0]?.id);
   const [isAdvancing, setIsAdvancing] = useState(false);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   
   // Find current goal by ID, fallback to first goal if not found
   const currentIndex = goals.findIndex(g => g.id === currentGoalId);
@@ -55,7 +58,12 @@ export default function GoalView({ goals }: GoalViewProps) {
     }
   };
 
-  const handleReset = async () => {
+  const handleResetClick = () => {
+    setShowResetConfirm(true);
+  };
+
+  const handleResetConfirm = async () => {
+    setShowResetConfirm(false);
     setIsAdvancing(true);
     try {
       await resetGoal(currentGoal.id);
@@ -64,10 +72,50 @@ export default function GoalView({ goals }: GoalViewProps) {
     } finally {
       setIsAdvancing(false);
     }
-  }
+  };
+
+  const handleResetCancel = () => {
+    setShowResetConfirm(false);
+  };
+
+  const handleDeleteClick = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    setShowDeleteConfirm(false);
+    setIsAdvancing(true);
+    try {
+      await deleteGoal(currentGoal.id);
+      router.refresh();
+    } catch (error) {
+      console.error("Failed to delete goal:", error);
+    } finally {
+      setIsAdvancing(false);
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteConfirm(false);
+  };
 
   return (
     <div className="bg-black flex flex-col gap-2.5 p-2.5 w-full h-full">
+      {showResetConfirm && (
+        <ConfirmationPopup
+          message="Êtes-vous sûr de vouloir réinitialiser cet objectif ?"
+          onConfirm={handleResetConfirm}
+          onCancel={handleResetCancel}
+        />
+      )}
+
+      {showDeleteConfirm && (
+        <ConfirmationPopup
+          message="Êtes-vous sûr de vouloir supprimer cet objectif ?"
+          onConfirm={handleDeleteConfirm}
+          onCancel={handleDeleteCancel}
+        />
+      )}
 
       {/* Main Content Area */}
       <div className="flex-1 flex items-center gap-24 px-2.5">
@@ -148,7 +196,14 @@ export default function GoalView({ goals }: GoalViewProps) {
 
           <div className="flex flex-col gap-2 md:flex-row-reverse justify-end">
             <button
-              onClick={handleReset}
+              onClick={handleDeleteClick}
+              disabled={isAdvancing}
+              className="button-hollow w-full"
+            >
+              Supprimer
+            </button>
+            <button
+              onClick={handleResetClick}
               disabled={isAdvancing || currentGoal.isComplete}
               className={`button-hollow ${currentGoal.isComplete && "hidden"} w-full`}
             >
@@ -168,31 +223,35 @@ export default function GoalView({ goals }: GoalViewProps) {
       </div>
 
       {/* Navigation: Previous/Next */}
-      <nav className="relative flex items-center justify-between px-2.5 font-pixelify-sans">
-        <button 
-          onClick={handlePrevious}
-          className="flex items-center gap-1 p-2.5 cursor-pointer"
-          disabled={goals.length <= 1}
-        >
-          <Image src={chevronLeft} alt="" width={24} height={24} />
-          <span className="text-white text-sm">Précédent</span>
-        </button>
+      {
+        goals.length > 1 && 
+          <nav className="relative flex items-center justify-between px-2.5 font-pixelify-sans">
+            <button 
+              onClick={handlePrevious}
+              className="flex items-center gap-1 p-2.5 cursor-pointer"
+              disabled={goals.length <= 1}
+            >
+              <Image src={chevronLeft} alt="" width={24} height={24} />
+              <span className="text-white text-sm">Précédent</span>
+            </button>
 
-        {goals.length > 1 && (
-          <span className="font-press-start-2p text-white text-sm absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            {actualIndex + 1} / {goals.length}
-          </span>
-        )}
+            {goals.length > 1 && (
+              <span className="font-press-start-2p text-white text-sm absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                {actualIndex + 1} / {goals.length}
+              </span>
+            )}
 
-        <button 
-          onClick={handleNext}
-          className="flex items-center gap-1 p-2.5 cursor-pointer"
-          disabled={goals.length <= 1}
-        >
-          <span className="text-white text-sm">Suivant</span>
-          <Image src={chevronRight} alt="" width={24} height={24} />
-        </button>
-      </nav>
+            <button 
+              onClick={handleNext}
+              className="flex items-center gap-1 p-2.5 cursor-pointer"
+              disabled={goals.length <= 1}
+            >
+              <span className="text-white text-sm">Suivant</span>
+              <Image src={chevronRight} alt="" width={24} height={24} />
+            </button>
+        </nav>
+      }
+
     </div>
   );
 }
