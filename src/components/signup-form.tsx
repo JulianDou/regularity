@@ -1,0 +1,77 @@
+"use client";
+
+import { signup } from "@/app/lib/auth";
+import { useFormState } from "react-dom";
+import Link from "next/link";
+
+export default function SignupForm() {
+  const [state, formAction] = useFormState(signup, undefined);
+
+  return (
+    <div className="bg-black min-h-screen flex flex-col items-center justify-center p-6">
+      <div className="w-full max-w-md">
+        <h1 className="text-3xl font-bold text-white text-center mb-8">
+          HabitTracker
+        </h1>
+        
+        <div className="generic-bordered-container">
+          <h2 className="text-2xl text-white mb-6">Créer un compte</h2>
+          
+          <form action={formAction} className="flex flex-col gap-4">
+            <div>
+              <label htmlFor="username" className="label-text">
+                Nom d&apos;utilisateur
+              </label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                required
+                minLength={3}
+                className="input-field w-full"
+                placeholder="Au moins 3 caractères"
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="password" className="label-text">
+                Mot de passe
+              </label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                required
+                minLength={6}
+                className="input-field w-full"
+                placeholder="Au moins 6 caractères"
+              />
+            </div>
+            
+            {state?.error && (
+              <div className="danger-container px-4 py-3">
+                {state.error}
+              </div>
+            )}
+            
+            <button
+              type="submit"
+              className="button-fill mt-4"
+            >
+              S&apos;inscrire
+            </button>
+          </form>
+          
+          <div className="mt-6 text-center">
+            <p className="text-gray-400">
+              Déjà un compte ?
+            </p>
+            <Link href="/login" className="text-blue-400 hover:text-blue-300">
+              Se connecter
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -7,10 +7,10 @@ export default async function CompletedPage() {
 
   if (goals.length === 0) {
     return (
-    <div className="bg-black flex flex-col gap-2.5 p-2.5 w-full h-full">
-      <header className="p-2.5">
-        <h1 className="text-2xl text-white">
-          Objectifs atteints
+    <div className="bg-black flex flex-col w-full h-full">
+      <header className="py-2">
+        <h1 className="page-title">
+          Planètes découvertes
         </h1>
       </header>
       <main className="flex-1 flex flex-col gap-5 items-center justify-center">
@@ -29,8 +29,8 @@ export default async function CompletedPage() {
   }));
 
   return (
-    <div className="bg-black flex flex-col gap-2.5 p-2.5 w-full h-full">
-      <header className="p-2.5">
+    <div className="bg-black flex flex-col  w-full h-full">
+      <header className="py-2">
         <h1 className="text-2xl text-white">
           Mes objectifs complétés
         </h1>

@@ -4,19 +4,16 @@ export const users = [
   {
     id: '410544b2-4001-4271-9855-fec4b6a6442a',
     username: 'EpicUser1234',
-    avatar: 'avatar_epicuser1234.jpg',
     password: 'password123', // Will be hashed in seed route
   },
   {
     id: '3958dc9e-712f-4377-85e9-fec4b6a6442b',
     username: 'MotivatedJane',
-    avatar: 'avatar_motivatedjane.jpg',
     password: 'securepass456',
   },
   {
     id: '76d65c26-f784-44a2-ac19-586678f7c2f2',
     username: 'FitnessKing',
-    avatar: 'avatar_fitnessking.jpg',
     password: 'fitness2024',
   },
 ];

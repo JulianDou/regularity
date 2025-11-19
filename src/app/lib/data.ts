@@ -2,17 +2,21 @@ import postgres from "postgres";
 import {
   Goal
 } from './definitions';
+import { requireAuth } from './session';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
 export async function fetchGoals() {
   try {
-    // Fetch only finite goals (time-limited, not infinite)
+    const user = await requireAuth();
+    
+    // Fetch only finite goals (time-limited, not infinite) for the current user
     const data = await sql<Goal[]>`
       SELECT * FROM goals 
       WHERE complete = false 
         AND type = 0
         AND goal_time > 0
+        AND owner = ${user.id}
       ORDER BY start_date DESC;
     `;
     return data;
@@ -24,9 +28,12 @@ export async function fetchGoals() {
 
 export async function fetchCompletedGoals() {
   try {
+    const user = await requireAuth();
+    
     const data = await sql<Goal[]>`
       SELECT * FROM goals 
       WHERE complete = true
+        AND owner = ${user.id}
       ORDER BY start_date DESC;
     `;
     return data;
@@ -38,11 +45,14 @@ export async function fetchCompletedGoals() {
 
 export async function fetchInfiniteGoals() {
   try {
-    // For future implementation - fetch infinite goals
+    const user = await requireAuth();
+    
+    // For future implementation - fetch infinite goals for the current user
     const data = await sql<Goal[]>`
       SELECT * FROM goals 
       WHERE complete = false 
         AND (type = 1 OR goal_time = 0)
+        AND owner = ${user.id}
       ORDER BY start_date DESC;
     `;
     return data;

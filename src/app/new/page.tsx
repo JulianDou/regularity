@@ -3,16 +3,18 @@ import CreateGoalForm from "@/components/create-goal-form";
 
 export default function NewGoalPage() {
   return (
-    <div className="bg-black flex flex-col gap-2.5 p-2.5 w-full h-full">
+    <div className="bg-black flex flex-col w-full h-full">
       {/* Header */}
-      <header className="p-2.5">
-        <h1 className="text-2xl text-white">
-          Créer un objectif
+      <header className="py-2">
+        <h1 className="page-title">
+          Nouvelle expédition
         </h1>
       </header>
 
-      {/* Form */}
-      <CreateGoalForm />
+      <main className="h-full">
+        {/* Form */}
+        <CreateGoalForm />
+      </main>
 
       {/* Navigation */}
       <Nav tab="Goals" />

@@ -35,13 +35,33 @@ body {
 }
 
 .button-fill {
-  @apply bg-white text-black font-pixelify-sans py-2.5 px-4 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply bg-white text-black text-center font-pixelify-sans py-2 px-4 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed;
 }
 
 .button-hollow {
-  @apply bg-transparent border-2 border-white text-white font-pixelify-sans py-2.5 px-4 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply bg-transparent border-2 border-white text-white text-center font-pixelify-sans py-2 px-4 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.label-text {
+  @apply block text-white font-pixelify-sans mb-1;
 }
 
 .input-field {
-  @apply flex-1 border-2 border-white bg-black text-white font-press-start-2p text-xs p-2.5 focus:outline-none focus:border-white;
+  @apply flex-1 border-2 border-white bg-black text-white font-press-start-2p text-xs p-2 focus:outline-none box-border;
+}
+
+.generic-bordered-container {
+  @apply p-4 border-2 border-white bg-black text-white; 
+}
+
+.danger-container {
+  @apply bg-red-900 border border-red-700 text-red-200;
+}
+
+.page-title {
+  @apply text-2xl text-white after:content-['_'] after:animate-pulse after:ml-1;
+}
+
+.responsive-width {
+  @apply w-full md:w-auto;
 }

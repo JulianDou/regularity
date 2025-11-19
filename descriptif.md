@@ -3,20 +3,18 @@
 ## Inscription et connexion
 On peut se créer un compte (sans mail pour l'exercice) qui comporte :
 - Un pseudo
-- Eventuellement un avatar pour personnaliser son appli
 - Un mot de passe
 L'appli demande donc d'être connecté pour accéder à ses objectifs
 ```json
 {
   user_id: 164568                                             // Identifiant unique de l'utilisateur
   username: "EpicUser1234",                                   // Pseudo de l'utilisateur (doit être unique)
-  avatar: "avatar_epicuser1234_155A8D2q55Lopmie186b.jpg",     // Nom du fichier de l'avatar de l'utilisateur
   pwd_hash: "a1f228756c978cec68b73517ea979cdc68fffda83..."    // Mot de passe (hashé) de l'utilisateur
 }
 ```
 
 ### Modifier son profil
-L'utilisateur pourra choisir un autre pseudo (unique) ainsi qu'un autre avatar
+L'utilisateur pourra choisir un autre pseudo (unique)
 
 ## Objectifs
 
@@ -81,15 +79,13 @@ On pourra, lorsqu'on complète un objectif, choisir de le rallonger (en rajoutan
 This document provides detailed user stories and implementation hints for developers working on HabitTracker.
 
 ## User Authentication
-### Story: As a user, I want to sign up and log in with a unique username and password, optionally setting an avatar.
-- Store user data in PostgreSQL: `user_id`, `username` (unique), `avatar` (filename), `pwd_hash` (hashed password).
+### Story: As a user, I want to sign up and log in with a unique username and password.
+- Store user data in PostgreSQL: `user_id`, `username` (unique), `pwd_hash` (hashed password).
 - Use Next.js API routes for authentication logic.
 - Hash passwords securely (e.g., bcrypt).
-- Avatar upload: store file in `/public/avatars` or use a cloud provider.
 
-### Story: As a user, I want to update my profile (username, avatar).
+### Story: As a user, I want to update my profile (username).
 - Validate new username uniqueness.
-- Allow avatar change (replace file, update DB reference).
 
 ## Goal Management
 ### Story: As a user, I want to add, edit, and delete goals.
@@ -132,7 +128,6 @@ This document provides detailed user stories and implementation hints for develo
 {
   user_id: number,
   username: string,
-  avatar: string,
   pwd_hash: string
 }
 
@@ -164,12 +159,10 @@ HabitTracker is a web application designed to help users set, track, and achieve
 
 ### User Authentication
 - Sign up and log in with a unique username and password (no email required).
-- Optional avatar for profile personalization.
 - Secure password storage (hashed).
 
 ### Profile Management
 - Change username (must remain unique).
-- Update avatar.
 
 ### Goal Management
 - Add new goals with a title, start date, and total time to achieve.

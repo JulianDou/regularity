@@ -4,15 +4,13 @@
 This document provides detailed user stories and implementation hints for developers working on HabitTracker.
 
 ## User Authentication
-### Story: As a user, I want to sign up and log in with a unique username and password, optionally setting an avatar.
-- Store user data in PostgreSQL: `user_id`, `username` (unique), `avatar` (filename), `pwd_hash` (hashed password).
+### Story: As a user, I want to sign up and log in with a unique username and password.
+- Store user data in PostgreSQL: `user_id`, `username` (unique), `pwd_hash` (hashed password).
 - Use Next.js API routes for authentication logic.
 - Hash passwords securely (e.g., bcrypt).
-- Avatar upload: store file in `/public/avatars` or use a cloud provider.
 
-### Story: As a user, I want to update my profile (username, avatar).
+### Story: As a user, I want to update my profile (username).
 - Validate new username uniqueness.
-- Allow avatar change (replace file, update DB reference).
 
 ## Goal Management
 ### Story: As a user, I want to add, edit, and delete goals.
@@ -55,7 +53,6 @@ This document provides detailed user stories and implementation hints for develo
 {
   user_id: number,
   username: string,
-  avatar: string,
   pwd_hash: string
 }
 

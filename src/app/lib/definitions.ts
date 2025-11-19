@@ -1,3 +1,9 @@
+export type User = {
+  id: string;
+  username: string;
+  pwd_hash: string;
+}
+
 export type Goal = {
   id: string;
   title: string;
@@ -8,4 +14,9 @@ export type Goal = {
   reset_date: string;
   complete: boolean;
   type: number;
+}
+
+export type SessionUser = {
+  id: string;
+  username: string;
 }

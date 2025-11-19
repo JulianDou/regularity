@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import postgres from "postgres";
+import { requireAuth } from './session';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
@@ -91,9 +92,9 @@ export async function deleteGoal(goalId: string) {
 export async function createGoal(formData: {
   title: string;
   days: number;
-  owner: string;
 }) {
   try {
+    const user = await requireAuth();
     const goalTimeInSeconds = formData.days * 24 * 60 * 60; // Convert days to seconds
     
     await sql`
@@ -101,7 +102,7 @@ export async function createGoal(formData: {
       VALUES (
         gen_random_uuid(),
         ${formData.title},
-        ${formData.owner},
+        ${user.id},
         CURRENT_TIMESTAMP,
         ${goalTimeInSeconds},
         0,

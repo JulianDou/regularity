@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Nav from "@/components/nav";
 import ConfirmationPopup from "@/components/confirm-popup";
 import rocketImg from "../../assets/rocket-vector.svg";
 import planetImg from "../../assets/planet-vector.svg";
@@ -100,7 +99,7 @@ export default function GoalView({ goals }: GoalViewProps) {
   };
 
   return (
-    <div className="bg-black flex flex-col gap-2.5 p-2.5 w-full h-full">
+    <div className="bg-black flex flex-col w-full h-full generic-bordered-container">
       {showResetConfirm && (
         <ConfirmationPopup
           message="Êtes-vous sûr de vouloir réinitialiser cet objectif ?"
@@ -118,9 +117,9 @@ export default function GoalView({ goals }: GoalViewProps) {
       )}
 
       {/* Main Content Area */}
-      <div className="flex-1 flex items-center gap-24 px-2.5">
+      <div className="flex-1 flex items-center gap-24">
         {/* Progress Meter */}
-        <aside className="flex flex-col items-center justify-between h-full gap-2.5">
+        <aside className="flex flex-col items-center justify-between gap-4 h-full ">
           <Image
             src={planetImg}
             alt="Planet"
@@ -171,8 +170,8 @@ export default function GoalView({ goals }: GoalViewProps) {
         </aside>
 
         {/* Goal Info */}
-        <section className="flex-1 flex flex-col justify-between h-full py-14">
-          <div className="flex flex-col gap-2.5">
+        <section className="flex-1 flex flex-col justify-between h-full">
+          <div className="flex flex-col gap-4">
             <div>
               <p className="text-white text-sm font-pixelify-sans">
                 Objectif actuel :
@@ -225,10 +224,10 @@ export default function GoalView({ goals }: GoalViewProps) {
       {/* Navigation: Previous/Next */}
       {
         goals.length > 1 && 
-          <nav className="relative flex items-center justify-between px-2.5 font-pixelify-sans">
+          <nav className="relative flex items-center justify-between px-2 gap-2 font-pixelify-sans">
             <button 
               onClick={handlePrevious}
-              className="flex items-center gap-1 p-2.5 cursor-pointer"
+              className="flex items-center gap-1 p-2 cursor-pointer"
               disabled={goals.length <= 1}
             >
               <Image src={chevronLeft} alt="" width={24} height={24} />
@@ -243,7 +242,7 @@ export default function GoalView({ goals }: GoalViewProps) {
 
             <button 
               onClick={handleNext}
-              className="flex items-center gap-1 p-2.5 cursor-pointer"
+              className="flex items-center gap-1 p-2 cursor-pointer"
               disabled={goals.length <= 1}
             >
               <span className="text-white text-sm">Suivant</span>

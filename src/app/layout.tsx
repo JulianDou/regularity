@@ -10,6 +10,7 @@ import wifi from "../../assets/layout/wifi.svg";
 import materialHome from "../../assets/layout/material-symbols_home-outline-rounded.svg";
 import fluentTabs from "../../assets/layout/fluent_tabs-24-regular.svg";
 import charmMenuKebab from "../../assets/layout/charm_menu-kebab.svg";
+import { getSession } from "@/app/lib/session";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -34,7 +35,7 @@ export const metadata: Metadata = {
   description: "Suivez vos habitudes et objectifs quotidiens avec HabitTracker. Visualisez votre progression et restez motivé.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -45,16 +46,20 @@ export default function RootLayout({
     minute: '2-digit',
     hour12: false
   });
+  const user = await getSession();
 
   return (
     <html lang="en" className="h-full">
       <body
         className={`${inter.variable} ${pixelifySans.variable} ${pressStart2P.variable} antialiased h-full font-press-start-2p`}
       >
-        {/* Main content area */}
-        <main className="flex-1 overflow-hidden h-full">
+        <div className="flex-1 overflow-hidden h-full generic-bordered-container">
+          {
+            user &&
+            <p className="text-xs text-gray-400">Utilisateur <span className="text-white">{user?.username}</span> connecté</p>
+          }
           {children}
-        </main>
+        </div>
       </body>
     </html>
   );

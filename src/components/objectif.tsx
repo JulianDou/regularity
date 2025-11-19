@@ -24,9 +24,9 @@ export default function Objectif({ temps = "24", description = "Vous avez réuss
   };
 
   return (
-    <div className="bg-white/90 flex flex-col gap-2.5 h-60 p-2.5 rounded-xl w-[162.5px]">
+    <div className="bg-white/90 flex flex-col  h-60 p-2 rounded-xl w-[162.5px]">
       {/* Progress Meter */}
-      <div className="relative w-full h-20 flex items-center justify-center p-2.5">
+      <div className="relative w-full h-20 flex items-center justify-center p-2">
         <Image 
           alt="Progress meter" 
           src={getMeterAsset(temps)} 
@@ -59,7 +59,7 @@ export default function Objectif({ temps = "24", description = "Vous avez réuss
         <button className="w-6 h-6 bg-[#cccccc] rounded-full flex items-center justify-center p-1">
           <Image alt="Delete" src={tablerTrash} width={16} height={16} />
         </button>
-        <button className="flex-1 bg-[#8df3d8] rounded-full flex items-center justify-center px-2.5 py-1">
+        <button className="flex-1 bg-[#8df3d8] rounded-full flex items-center justify-center px-2 py-1">
           <Image alt="Edit" src={lucideEdit} width={16} height={16} />
         </button>
         <button className="w-6 h-6 bg-[#fcb8b8] rounded-full flex items-center justify-center p-1">

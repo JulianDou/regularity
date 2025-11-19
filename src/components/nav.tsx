@@ -16,11 +16,11 @@ export default function Nav({ tab = "Goals" }: NavProps) {
   const isActive = (currentTab: string) => currentTab === tab;
 
   return (
-    <nav className="flex gap-4 items-center justify-center p-2.5">
+    <nav className="flex gap-4 items-center justify-center p-2 my-2">
       <button 
         className={isActive("Completed") 
           ? "border-4 border-white px-5 py-4" 
-          : "border-2 border-white p-2.5 cursor-pointer"
+          : "border-2 border-white p-2 cursor-pointer"
         }
         aria-label="Completed goals"
         onClick={() => router.push('/completed')}
@@ -31,7 +31,7 @@ export default function Nav({ tab = "Goals" }: NavProps) {
       <button 
         className={isActive("Goals") 
           ? "border-4 border-white px-5 py-4" 
-          : "border-2 border-white p-2.5 cursor-pointer"
+          : "border-2 border-white p-2 cursor-pointer"
         }
         aria-label="Goals"
         onClick={() => router.push('/')}
@@ -45,6 +45,7 @@ export default function Nav({ tab = "Goals" }: NavProps) {
           : "border-2 border-white p-2.5 cursor-pointer"
         }
         aria-label="Profile"
+        onClick={() => router.push('/profile')}
       >
         <Image alt="" src={profileIcon} width={24} height={24} />
       </button>

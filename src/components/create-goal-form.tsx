@@ -31,14 +31,9 @@ export default function CreateGoalForm() {
     setIsSubmitting(true);
 
     try {
-      // TODO: Get actual user ID from auth session
-      // For now using a placeholder
-      const userId = "410544b2-4001-4271-9855-fec4b6a6442a";
-      
       const result = await createGoal({
         title: title.trim(),
         days: daysNum,
-        owner: userId,
       });
 
       if (result.success) {
@@ -54,10 +49,10 @@ export default function CreateGoalForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-2.5 p-2.5 font-pixelify-sans">
+    <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-4 generic-bordered-container h-full">
       {/* Title Input */}
       <div className="flex flex-col gap-1">
-        <label className="text-white text-base">
+        <label className="label-text">
           Nom de l&apos;objectif
         </label>
         <input
@@ -72,7 +67,7 @@ export default function CreateGoalForm() {
 
       {/* Days Input */}
       <div className="flex flex-col gap-1">
-        <label className="text-white text-base">
+        <label className="label-text">
           Distance
         </label>
         <div className="flex items-center gap-1">
@@ -85,7 +80,7 @@ export default function CreateGoalForm() {
             className="input-field"
             disabled={isSubmitting}
           />
-          <span className="text-white text-base">jours</span>
+          <span className="label-text">jours</span>
         </div>
       </div>
 
