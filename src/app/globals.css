@@ -8,13 +8,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
   --font-inter: var(--font-inter);
-  --font-adamina: var(--font-adamina);
-  --font-abhaya-libre: var(--font-abhaya-libre);
-  --font-arapey: var(--font-arapey);
   --font-pixelify-sans: var(--font-pixelify-sans);
+  --font-press-start-2p: var(--font-press-start-2p);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -30,34 +26,12 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Custom font classes matching Figma design */
-.font-inter-medium {
-  font-family: var(--font-inter), sans-serif;
-  font-weight: 500;
-}
-
-.font-adamina-regular {
-  font-family: var(--font-adamina), serif;
-  font-weight: 400;
-}
-
-.font-abhaya-libre-bold {
-  font-family: var(--font-abhaya-libre), serif;
-  font-weight: 700;
-}
-
-.font-abhaya-libre-regular {
-  font-family: var(--font-abhaya-libre), serif;
-  font-weight: 400;
-}
-
-.font-arapey-regular {
-  font-family: var(--font-arapey), serif;
-  font-weight: 400;
-}
-
 .font-pixelify-sans {
   font-family: var(--font-pixelify-sans), sans-serif;
+}
+
+.font-press-start-2p {
+  font-family: var(--font-press-start-2p), sans-serif;
 }
 
 .button-fill {
@@ -69,5 +43,5 @@ body {
 }
 
 .input-field {
-  @apply flex-1 border-2 border-white bg-black text-white font-pixelify-sans text-base p-2.5 focus:outline-none focus:border-white;
+  @apply flex-1 border-2 border-white bg-black text-white font-press-start-2p text-xs p-2.5 focus:outline-none focus:border-white;
 }

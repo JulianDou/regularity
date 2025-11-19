@@ -6,7 +6,7 @@ export default function NewGoalPage() {
     <div className="bg-black flex flex-col gap-2.5 p-2.5 w-full h-full">
       {/* Header */}
       <header className="p-2.5">
-        <h1 className="text-2xl text-white font-pixelify-sans">
+        <h1 className="text-2xl text-white">
           Créer un objectif
         </h1>
       </header>

@@ -21,3 +21,7 @@ This is a Next.js 14 habit tracking application with TypeScript, TailwindCSS, an
 - Progress visualization with vertical bar indicator
 - Goal reset and progress functionality
 - Profile management with avatar support
+
+## Copilot Instructions
+- Do not write specific test scripts after a prompt
+- Do not write documentation markdowns to recap changes

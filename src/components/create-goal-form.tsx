@@ -54,10 +54,10 @@ export default function CreateGoalForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-2.5 p-2.5">
+    <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-2.5 p-2.5 font-pixelify-sans">
       {/* Title Input */}
       <div className="flex flex-col gap-1">
-        <label className="text-white font-pixelify-sans text-base">
+        <label className="text-white text-base">
           Nom de l&apos;objectif
         </label>
         <input
@@ -72,7 +72,7 @@ export default function CreateGoalForm() {
 
       {/* Days Input */}
       <div className="flex flex-col gap-1">
-        <label className="text-white font-pixelify-sans text-base">
+        <label className="text-white text-base">
           Distance
         </label>
         <div className="flex items-center gap-1">
@@ -85,13 +85,13 @@ export default function CreateGoalForm() {
             className="input-field"
             disabled={isSubmitting}
           />
-          <span className="text-white font-pixelify-sans text-base">jours</span>
+          <span className="text-white text-base">jours</span>
         </div>
       </div>
 
       {/* Error Message */}
       {error && (
-        <p className="text-red-400 font-pixelify-sans text-sm">
+        <p className="text-red-400 text-sm">
           {error}
         </p>
       )}
@@ -113,7 +113,7 @@ export default function CreateGoalForm() {
         disabled={isSubmitting}
         className="button-fill w-full"
       >
-        <span className="text-black font-pixelify-sans text-base">
+        <span className="text-black text-base">
           {isSubmitting ? "3, 2, 1..." : "Lancement !"}
         </span>
       </button>
@@ -125,7 +125,7 @@ export default function CreateGoalForm() {
         disabled={isSubmitting}
         className="button-hollow w-full"
       >
-        <span className="text-white font-pixelify-sans text-base">Annuler</span>
+        <span className="text-white text-base">Annuler</span>
       </button>
     </form>
   );

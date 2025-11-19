@@ -22,6 +22,20 @@ export async function fetchGoals() {
   }
 }
 
+export async function fetchCompletedGoals() {
+  try {
+    const data = await sql<Goal[]>`
+      SELECT * FROM goals 
+      WHERE complete = true
+      ORDER BY start_date DESC;
+    `;
+    return data;
+  } catch (error) {
+    console.error("Error fetching completed goals:", error);
+    return [];
+  }
+}
+
 export async function fetchInfiniteGoals() {
   try {
     // For future implementation - fetch infinite goals

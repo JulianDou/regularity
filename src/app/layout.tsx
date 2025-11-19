@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter, Adamina, Abhaya_Libre, Arapey, Pixelify_Sans } from "next/font/google";
+import { Inter, Pixelify_Sans,  Press_Start_2P} from "next/font/google";
 import Image from "next/image";
 import "./globals.css";
 
@@ -11,44 +11,22 @@ import materialHome from "../../assets/layout/material-symbols_home-outline-roun
 import fluentTabs from "../../assets/layout/fluent_tabs-24-regular.svg";
 import charmMenuKebab from "../../assets/layout/charm_menu-kebab.svg";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
 });
 
-const adamina = Adamina({
-  variable: "--font-adamina",
-  subsets: ["latin"],
-  weight: "400",
-});
-
-const abhayaLibre = Abhaya_Libre({
-  variable: "--font-abhaya-libre",
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
-
-const arapey = Arapey({
-  variable: "--font-arapey",
-  subsets: ["latin"],
-  weight: "400",
-});
-
 const pixelifySans = Pixelify_Sans({
   variable: "--font-pixelify-sans",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+});
+
+const pressStart2P = Press_Start_2P({
+  variable: "--font-press-start-2p",
+  subsets: ["latin"],
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
@@ -71,13 +49,13 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${adamina.variable} ${abhayaLibre.variable} ${arapey.variable} ${pixelifySans.variable} antialiased h-full`}
+        className={`${inter.variable} ${pixelifySans.variable} ${pressStart2P.variable} antialiased h-full font-press-start-2p`}
       >
         {/* Mobile smartphone UI wrapper - hidden on desktop */}
         <div className="bg-[#444444] flex flex-col h-full">
           {/* Mobile Status Bar - Top */}
           <div className="md:hidden flex items-center justify-between px-2.5 py-1.5 w-full">
-            <p className="text-xs text-white font-medium">
+            <p className="text-xs text-white font-medium font-inter">
               {currentTime}
             </p>
             <div className="flex items-center gap-1">
@@ -91,7 +69,7 @@ export default function RootLayout({
           <div className="md:hidden flex items-center gap-2.5 p-2.5 w-full">
             <Image alt="Home icon" src={materialHome} width={24} height={24} className="shrink-0" />
             <div className="flex-1 bg-[#313131] px-5 py-2.5 rounded-full">
-              <p className="text-xs text-white font-medium truncate">
+              <p className="text-xs text-white font-medium truncate font-inter">
                 www.habittracker.app
               </p>
             </div>
