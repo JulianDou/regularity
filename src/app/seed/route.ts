@@ -44,7 +44,8 @@ async function seedGoals() {
       reset_date DATE NOT NULL,
       complete BOOLEAN NOT NULL DEFAULT FALSE,
       type INTEGER NOT NULL DEFAULT 0,
-      completions DATE[] DEFAULT '{}'
+      completions DATE[] DEFAULT '{}',
+      flight_log_events JSONB DEFAULT '{}'
     );
   `;
 

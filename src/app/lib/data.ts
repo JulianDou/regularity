@@ -4,7 +4,10 @@ import {
 } from './definitions';
 import { requireAuth } from './session';
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+const sql = postgres(process.env.POSTGRES_URL!, { 
+  ssl: 'require',
+  prepare: false // Disable prepared statements to avoid cached plan issues
+});
 
 export async function fetchGoals() {
   try {

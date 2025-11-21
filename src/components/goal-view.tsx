@@ -3,15 +3,13 @@
 import { useState } from "react";
 import Image from "next/image";
 import ConfirmationPopup from "@/components/confirm-popup";
-import rocketImg from "../../assets/rocket-vector.svg";
-import planetImg from "../../assets/planet-vector.svg";
-import flagImg from "../../assets/flag-vector.svg";
-import planetFlagImg from "../../assets/planet-flag-vector.svg";
 import chevronLeft from "../../assets/chevron-left.svg";
 import chevronRight from "../../assets/chevron-right.svg";
 import { Goal } from "@/app/lib/definitions";
 import { advanceGoal, resetGoal, deleteGoal, revertCompletion } from "@/app/lib/actions";
 import { useRouter } from "next/navigation";
+import FlightLog from "@/components/flight-log";
+import ProgressMeter from "@/ui/progressMeter";
 
 interface GoalWithProgress extends Goal {
   currentDays: number;
@@ -131,61 +129,13 @@ export default function GoalView({ goals }: GoalViewProps) {
       )}
 
       {/* Main Content Area */}
-      <div className="flex-1 flex items-center gap-24">
+      <div className="flex-1 flex items-center">
         {/* Progress Meter */}
-        <aside className="flex flex-col items-center justify-between gap-4 h-full ">
-          <Image
-            src={currentGoal.isComplete ? planetFlagImg : planetImg}
-            alt="Planet"
-            width={50}
-            height={50}
-            className="w-12 h-12 shrink-0"
-          />
-
-          <div className="relative flex flex-col justify-end h-full w-12 border-l-[5px] border-b-[5px] border-t-[5px] border-white font-pixelify-sans">
-            <div
-              className="relative w-full border-l-[20px] border-white"
-              style={{ height: `${currentGoal.progress}%` }}
-            >
-              <div 
-                className={`
-                  absolute -top-2 -left-3 flex items-center gap-1 transform -translate-y-full
-                  ${currentGoal.isComplete && "hidden"}
-                `}
-              >
-                <Image
-                  src={rocketImg}
-                  alt="Rocket"
-                  width={32}
-                  height={44}
-                  className="w-8 h-11"
-                />
-                <span className="text-sm text-white whitespace-nowrap">
-                  {currentGoal.currentDays} {currentGoal.currentDays === 1 ? "jour" : "jours"}
-                </span>
-              </div>
-            </div>
-
-            <span className="absolute -right-2 -bottom-3 translate-x-full text-sm text-nowrap text-white">
-              0 jours
-            </span>
-            <span className="absolute -right-2 -top-3 translate-x-full text-sm text-nowrap text-white">
-              {currentGoal.totalDays} jours
-            </span>
-          </div>
-
-          <Image
-            src={flagImg}
-            alt="Flag"
-            width={50}
-            height={39}
-            className="w-12 h-10 shrink-0"
-          />
-        </aside>
+        <ProgressMeter currentGoal={currentGoal} />
 
         {/* Goal Info */}
-        <section className="flex-1 flex flex-col justify-between h-full">
-          <div className="flex flex-col gap-4">
+        <section className="flex-1 flex flex-col justify-between h-full gap-4">
+          <div className="flex flex-col gap-4 h-full">
             <div>
               <p className="text-white text-sm font-pixelify-sans">
                 Objectif actuel :
@@ -205,6 +155,9 @@ export default function GoalView({ goals }: GoalViewProps) {
                 {currentGoal.progress}%
               </p>
             </div>
+
+            {/* Flight Log */}
+            <FlightLog goal={currentGoal} />
           </div>
 
           <div className="flex flex-col gap-2 md:flex-row-reverse justify-end">
