@@ -15,7 +15,6 @@ export type Goal = {
   complete: boolean;
   type: number;
   completions: string[];
-  flight_log_events: Record<string, string>;
 }
 
 export type SessionUser = {

@@ -8,7 +8,6 @@ import chevronRight from "../../assets/chevron-right.svg";
 import { Goal } from "@/app/lib/definitions";
 import { advanceGoal, resetGoal, deleteGoal, revertCompletion } from "@/app/lib/actions";
 import { useRouter } from "next/navigation";
-import FlightLog from "@/components/flight-log";
 import ProgressMeter from "@/ui/progressMeter";
 
 interface GoalWithProgress extends Goal {
@@ -44,7 +43,6 @@ export default function GoalView({ goals }: GoalViewProps) {
   const handleNext = () => {
     const newIndex = actualIndex < goals.length - 1 ? actualIndex + 1 : 0;
     setCurrentGoalId(goals[newIndex].id);
-    console.log(currentGoal);
   };
 
   const handleAdvance = async () => {
@@ -155,9 +153,6 @@ export default function GoalView({ goals }: GoalViewProps) {
                 {currentGoal.progress}%
               </p>
             </div>
-
-            {/* Flight Log */}
-            <FlightLog goal={currentGoal} />
           </div>
 
           <div className="flex flex-col gap-2 md:flex-row-reverse justify-end">

@@ -1,15 +1,8 @@
 import type { Metadata } from "next";
-import { Inter, Pixelify_Sans,  Press_Start_2P} from "next/font/google";
-import Image from "next/image";
+import { Inter, Pixelify_Sans, Press_Start_2P} from "next/font/google";
 import "./globals.css";
 
 // Mobile UI assets
-import battery from "../../assets/layout/battery.svg";
-import network from "../../assets/layout/network.svg";
-import wifi from "../../assets/layout/wifi.svg";
-import materialHome from "../../assets/layout/material-symbols_home-outline-rounded.svg";
-import fluentTabs from "../../assets/layout/fluent_tabs-24-regular.svg";
-import charmMenuKebab from "../../assets/layout/charm_menu-kebab.svg";
 import { getSession } from "@/app/lib/session";
 
 const inter = Inter({
@@ -40,16 +33,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Get current time for mobile status bar
-  const currentTime = new Date().toLocaleTimeString('fr-FR', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false
-  });
   const user = await getSession();
 
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className="h-screen">
       <body
         className={`${inter.variable} ${pixelifySans.variable} ${pressStart2P.variable} antialiased h-full font-press-start-2p`}
       >

@@ -1,11 +1,11 @@
 "use client";
 
 import { signup } from "@/app/lib/auth";
-import { useFormState } from "react-dom";
 import Link from "next/link";
+import { useActionState } from "react";
 
 export default function SignupForm() {
-  const [state, formAction] = useFormState(signup, undefined);
+  const [state, formAction] = useActionState(signup, undefined);
 
   return (
     <div className="bg-black min-h-screen flex flex-col items-center justify-center p-6">

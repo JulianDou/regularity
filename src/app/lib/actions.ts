@@ -3,7 +3,6 @@
 import { revalidatePath } from "next/cache";
 import postgres from "postgres";
 import { requireAuth } from './session';
-import { getFlightLogEvent } from './flight-log-events';
 
 const sql = postgres(process.env.POSTGRES_URL!, { 
   ssl: 'require',
@@ -14,20 +13,12 @@ export async function advanceGoal(goalId: string) {
   try {
     const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
     
-    // Generate flight log event for today
-    const event = getFlightLogEvent(new Date(), true);
-    
     // Check if already completed today and increment if not
     const result = await sql`
       UPDATE goals 
       SET progress = progress + 1,
           reset_date = CURRENT_TIMESTAMP,
-          completions = array_append(completions, ${today}::date),
-          flight_log_events = jsonb_set(
-            COALESCE(flight_log_events, '{}'::jsonb),
-            ARRAY[${today}],
-            to_jsonb(${event}::text)
-          )
+          completions = array_append(completions, ${today}::date)
       WHERE id = ${goalId}
         AND NOT (${today}::date = ANY(completions))
       RETURNING progress, goal_time
@@ -68,8 +59,7 @@ export async function resetGoal(goalId: string) {
       SET progress = 0,
           start_date = CURRENT_TIMESTAMP,
           reset_date = CURRENT_TIMESTAMP,
-          completions = '{}',
-          flight_log_events = '{}'
+          completions = '{}'
       WHERE id = ${goalId}
     `;
     
@@ -116,12 +106,11 @@ export async function revertCompletion(goalId: string) {
   try {
     const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
     
-    // Revert the progress, remove today from completions, and remove event
+    // Revert the progress and remove today from completions
     const result = await sql`
       UPDATE goals 
       SET progress = GREATEST(0, progress - 1),
-          completions = array_remove(completions, ${today}::date),
-          flight_log_events = (flight_log_events - ${today})
+          completions = array_remove(completions, ${today}::date)
       WHERE id = ${goalId}
         AND ${today}::date = ANY(completions)
       RETURNING progress

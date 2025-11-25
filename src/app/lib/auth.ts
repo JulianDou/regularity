@@ -13,7 +13,7 @@ export async function login(prevState: { error: string } | undefined, formData: 
   const password = formData.get('password') as string;
   
   if (!username || !password) {
-    return { error: 'Username and password are required' };
+    return { error: 'Veuillez renseigner tous les champs' };
   }
   
   try {
@@ -25,7 +25,7 @@ export async function login(prevState: { error: string } | undefined, formData: 
     `;
     
     if (users.length === 0) {
-      return { error: 'Invalid username or password' };
+      return { error: 'Identifiants invalides' };
     }
     
     const user = users[0];
@@ -34,7 +34,7 @@ export async function login(prevState: { error: string } | undefined, formData: 
     const passwordMatch = await bcrypt.compare(password, user.pwd_hash);
     
     if (!passwordMatch) {
-      return { error: 'Invalid username or password' };
+      return { error: 'Identifiants invalides' };
     }
     
     // Create session
@@ -47,7 +47,7 @@ export async function login(prevState: { error: string } | undefined, formData: 
     
   } catch (error) {
     console.error('Login error:', error);
-    return { error: 'An error occurred during login' };
+    return { error: 'Une erreur est survenue lors de la connexion' };
   }
   
   redirect('/');
@@ -58,15 +58,15 @@ export async function signup(prevState: { error: string } | undefined, formData:
   const password = formData.get('password') as string;
   
   if (!username || !password) {
-    return { error: 'Username and password are required' };
+    return { error: 'Veuillez renseigner tous les champs' };
   }
   
   if (username.length < 3) {
-    return { error: 'Username must be at least 3 characters long' };
+    return { error: 'Le nom d\'utilisateur doit comporter au moins 3 caractères' };
   }
   
   if (password.length < 6) {
-    return { error: 'Password must be at least 6 characters long' };
+    return { error: 'Le mot de passe doit comporter au moins 6 caractères' };
   }
   
   try {
@@ -78,7 +78,7 @@ export async function signup(prevState: { error: string } | undefined, formData:
     `;
     
     if (existingUsers.length > 0) {
-      return { error: 'Username already exists' };
+      return { error: 'Le nom d\'utilisateur existe déjà' };
     }
     
     // Hash password
@@ -87,7 +87,7 @@ export async function signup(prevState: { error: string } | undefined, formData:
     // Create user
     const newUsers = await sql<User[]>`
       INSERT INTO users (username, pwd_hash)
-      VALUES (${username}, ${pwd_hash}
+      VALUES (${username}, ${pwd_hash})
       RETURNING id, username
     `;
     
@@ -103,7 +103,7 @@ export async function signup(prevState: { error: string } | undefined, formData:
     
   } catch (error) {
     console.error('Signup error:', error);
-    return { error: 'An error occurred during signup' };
+    return { error: 'Une erreur est survenue lors de l\'inscription', detail: (error as Error).message };
   }
   
   redirect('/');
