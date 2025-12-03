@@ -83,7 +83,7 @@ export default function CreateGoalForm() {
             onChange={(e) => setTime(e.target.value)}
             placeholder="_"
             min="1"
-            className="input-field"
+            className="input-field w-full"
             disabled={isSubmitting}
           />
           <select 

@@ -5,7 +5,7 @@
   --intermediate: #777777;
   --foreground: #171717;
   --danger: #c13939;
-  --success: #57dd88;
+  --success: #2fb961;
 }
 
 @theme inline {
@@ -25,7 +25,7 @@
     --background: #0a0a0a;
     --intermediate: #777777;
     --foreground: #ededed;
-    --danger: #c13939;
+    --danger: #d45151;
     --success: #57dd88;
   }
 }

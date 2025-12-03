@@ -186,6 +186,70 @@ export default function GoalView({ goals }: GoalViewProps) {
     return Math.round((currentGoal.completions.length / totalDays) * 100);
   })();
 
+  const streak = (() => {
+    if (currentGoal.completions.length === 0) return 0;
+    let streakCount = 0;
+
+    // To get goals from latest to oldest
+    const reversedCompletions = currentGoal.completions.slice().reverse();
+    
+    if (currentGoal.period === "days") {
+      const interval = 1000 * 60 * 60 * 24; // 1 day in ms
+
+      for (const day of reversedCompletions) {
+        const completionDate = new Date(day);
+        completionDate.setHours(0, 0, 0, 0);
+
+        // Get the date that would correspond to the current streak count
+        // E.g. : three days ago if streak is 3
+        const expectedDate = new Date();
+        expectedDate.setHours(0, 0, 0, 0);
+        expectedDate.setTime(expectedDate.getTime() - (streakCount * interval));
+
+        // If the current completion equals the expected date, then that means a streak was maintained
+        // Otherwise the streak was broken and we can stop counting
+        if (completionDate.getTime() === expectedDate.getTime()) {
+          streakCount++;
+        } else {
+          break;
+        }      
+      }
+    }
+    else if (currentGoal.period === "weeks") {
+      const interval = 1000 * 60 * 60 * 24 * 7; // 1 week in ms
+
+      for (const day of reversedCompletions) {
+
+        // Convert that day to the Monday of that week for easier comparison
+        const completionDate = new Date(day);
+        completionDate.setHours(0, 0, 0, 0);
+        const mondayThatWeek = new Date(completionDate);
+        const dayOfWeek = mondayThatWeek.getDay();
+        const diffToMonday = (dayOfWeek + 6) % 7; // 0 (Mon) - 6 (Sun)
+        mondayThatWeek.setDate(mondayThatWeek.getDate() - diffToMonday);
+
+        // Get the date that would correspond to the current streak count
+        // E.g. : the Monday three weeks ago if streak is 3
+        const expectedDate = new Date();
+        expectedDate.setHours(0, 0, 0, 0);
+        const todayDay = expectedDate.getDay();
+        const todayDiffToMonday = (todayDay + 6) % 7;
+        expectedDate.setDate(expectedDate.getDate() - todayDiffToMonday); // set to this week's Monday
+        expectedDate.setTime(expectedDate.getTime() - (streakCount * interval));
+
+        // If the current completion's week equals the expected week, then that means a streak was maintained
+        // Otherwise the streak was broken and we can stop counting
+        if (mondayThatWeek.getTime() === expectedDate.getTime()) {
+          streakCount++;
+        } else {
+          break;
+        }
+      }
+    }
+
+    return streakCount;  
+  })();
+
   const router = useRouter();
 
   const translateWeekday = (day: string) => {
@@ -282,6 +346,8 @@ export default function GoalView({ goals }: GoalViewProps) {
     setShowDeleteConfirm(false);
   };
 
+  console.log(streak);
+
   return (
     <div className="bg-background flex flex-col gap-4 w-full h-full generic-bordered-container">
       {showResetConfirm && (
@@ -377,6 +443,14 @@ export default function GoalView({ goals }: GoalViewProps) {
                   {currentGoal.period === "days" ? " jours " : " semaines "} 
                   sur {currentGoal.complete && daysSinceLastCompletion !== null ? (daysSinceStart - daysSinceLastCompletion) : daysSinceStart}
                 </p>
+                {
+                  streak > 0 &&
+                  <p className={"text-success font-pixelify-sans text-xs"}>
+                    vous avez complété {streak} 
+                    {currentGoal.period === "days" ? " jours " : " semaines "} 
+                    à la suite ! Continuez !
+                  </p>
+                }
               </div>
             }
           </div>

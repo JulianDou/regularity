@@ -303,6 +303,10 @@ export async function createGoal(formData: {
     const user = await requireAuth();
     const daysCount = formData.period === 'weeks' ? formData.time * 7 : formData.time;
     const goalTimeInSeconds = daysCount * 24 * 60 * 60;
+
+    // Remove specific day constraint if goal is daily
+    // (since form element is removed client side but data might still be sent)
+    const mustAdvanceOn = formData.period === 'weeks' ? formData.mustAdvanceOn : undefined;
     
     await sql`
       INSERT INTO goals (id, title, owner, start_date, goal_time, progress, reset_date, complete, type, period, must_advance_on)
@@ -317,11 +321,10 @@ export async function createGoal(formData: {
         false,
         0,
         ${formData.period},
-        ${formData.mustAdvanceOn || null}
+        ${mustAdvanceOn || null}
       )
     `;
     
-    revalidatePath('/');
     return { success: true };
   } catch (error) {
     console.error("Error creating goal:", error);
