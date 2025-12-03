@@ -14,6 +14,8 @@ export type Goal = {
   reset_date: string;
   complete: boolean;
   type: number;
+  period: 'days' | 'weeks';
+  must_advance_on: string | null;
   completions: string[];
 }
 

@@ -3,7 +3,7 @@ import CreateGoalForm from "@/components/create-goal-form";
 
 export default function NewGoalPage() {
   return (
-    <div className="bg-black flex flex-col w-full h-full">
+    <div className="bg-background flex flex-col w-full h-full">
       {/* Header */}
       <header className="py-2">
         <h1 className="page-title">

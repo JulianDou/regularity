@@ -1,9 +1,8 @@
 "use client";
 
-import Image from "next/image";
-import checkIcon from "../../assets/check-icon.svg";
-import flagIcon from "../../assets/flag-icon.svg";
-import profileIcon from "../../assets/profile-icon.svg";
+import CheckIcon from "../../assets/check-icon.svg";
+import FlagIcon from "../../assets/flag-icon.svg";
+import ProfileIcon from "../../assets/profile-icon.svg";
 import { useRouter } from "next/navigation";
 
 interface NavProps {
@@ -19,35 +18,35 @@ export default function Nav({ tab = "Goals" }: NavProps) {
     <nav className="flex gap-4 items-center justify-center p-2 my-2">
       <button 
         className={isActive("Completed") 
-          ? "border-4 border-white px-5 py-4" 
-          : "border-2 border-white p-2 cursor-pointer"
+          ? "border-4 border-foreground px-5 py-4" 
+          : "border-2 border-foreground p-2 cursor-pointer"
         }
         aria-label="Completed goals"
         onClick={() => router.push('/completed')}
       >
-        <Image alt="" src={checkIcon} width={24} height={24} />
+        <CheckIcon className="w-6 h-6 text-foreground" />
       </button>
 
       <button 
         className={isActive("Goals") 
-          ? "border-4 border-white px-5 py-4" 
-          : "border-2 border-white p-2 cursor-pointer"
+          ? "border-4 border-foreground px-5 py-4" 
+          : "border-2 border-foreground p-2 cursor-pointer"
         }
         aria-label="Goals"
         onClick={() => router.push('/')}
       >
-        <Image alt="" src={flagIcon} width={24} height={24} />
+        <FlagIcon className="w-6 h-6 text-foreground" />
       </button>
 
       <button 
         className={isActive("Profile") 
-          ? "border-4 border-white px-5 py-4" 
-          : "border-2 border-white p-2.5 cursor-pointer"
+          ? "border-4 border-foreground px-5 py-4" 
+          : "border-2 border-foreground p-2.5 cursor-pointer"
         }
         aria-label="Profile"
         onClick={() => router.push('/profile')}
       >
-        <Image alt="" src={profileIcon} width={24} height={24} />
+        <ProfileIcon className="w-6 h-6 text-foreground" />
       </button>
     </nav>
   );

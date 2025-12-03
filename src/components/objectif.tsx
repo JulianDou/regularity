@@ -24,7 +24,7 @@ export default function Objectif({ temps = "24", description = "Vous avez réuss
   };
 
   return (
-    <div className="bg-white/90 flex flex-col  h-60 p-2 rounded-xl w-[162.5px]">
+    <div className="bg-foreground/90 flex flex-col  h-60 p-2 rounded-xl w-[162.5px]">
       {/* Progress Meter */}
       <div className="relative w-full h-20 flex items-center justify-center p-2">
         <Image 
@@ -35,17 +35,17 @@ export default function Objectif({ temps = "24", description = "Vous avez réuss
           className="object-contain"
         />
         <div className="absolute flex flex-col items-center justify-center text-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mt-1.5">
-          <p className="text-2xl text-black font-adamina">{temps}</p>
+          <p className="text-2xl text-background font-adamina">{temps}</p>
           <p className="text-xs text-[#8a8a8a]">jours</p>
         </div>
       </div>
 
       {/* Description */}
       <div className="flex flex-col items-center flex-1 w-full">
-        <p className="text-sm text-black text-center font-abhaya-libre font-bold">
+        <p className="text-sm text-background text-center font-abhaya-libre font-bold">
           {titre}
         </p>
-        <p className="flex-1 text-xs text-black text-center font-arapey">
+        <p className="flex-1 text-xs text-background text-center font-arapey">
           {description}
         </p>
         <div className="flex items-center justify-center gap-0.5 text-xs text-[#8a8a8a] text-center">

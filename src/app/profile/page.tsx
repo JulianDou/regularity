@@ -6,9 +6,9 @@ export default async function ProfilePage() {
   const user = await getSession();
 
   return (
-    <div className="bg-black flex flex-col  w-full h-full">
+    <div className="bg-background flex flex-col  w-full h-full">
       <header className="py-2">
-        <h1 className="text-2xl text-white">
+        <h1 className="text-2xl text-foreground">
           Journal de bord
         </h1>
       </header>
@@ -17,7 +17,7 @@ export default async function ProfilePage() {
         <div className="flex flex-col gap-4">
           <div>
             <p className="label-text">Nom du capitaine</p>
-            <p className="text-white text-lg">{user?.username}</p>
+            <p className="text-foreground text-lg">{user?.username}</p>
           </div>
         </div>
           

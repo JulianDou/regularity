@@ -8,14 +8,14 @@ export default function LoginForm() {
   const [state, formAction] = useActionState(login, undefined);
 
   return (
-    <div className="bg-black min-h-screen flex flex-col items-center justify-center p-6">
+    <div className="bg-background min-h-screen flex flex-col items-center justify-center p-6">
       <div className="w-full max-w-md">
-        <h1 className="text-3xl font-bold text-white text-center mb-8">
+        <h1 className="text-3xl font-bold text-foreground text-center mb-8">
           HabitTracker
         </h1>
         
         <div className="generic-bordered-container">
-          <h2 className="text-2xl text-white mb-6">Connexion</h2>
+          <h2 className="text-2xl text-foreground mb-6">Connexion</h2>
           
           <form action={formAction} className="flex flex-col gap-4">
             <div>

@@ -43,7 +43,7 @@ export default async function RootLayout({
         <div className="flex-1 overflow-hidden h-full generic-bordered-container">
           {
             user &&
-            <p className="text-xs text-gray-400">Utilisateur <span className="text-white">{user?.username}</span> connecté</p>
+            <p className="text-xs text-intermediate">Utilisateur <span className="text-foreground">{user?.username}</span> connecté</p>
           }
           {children}
         </div>

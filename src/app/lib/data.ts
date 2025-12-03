@@ -64,27 +64,3 @@ export async function fetchInfiniteGoals() {
     return [];
   }
 }
-
-export function calculateGoalProgress(goal: Goal) {
-  // Progress is now based on the stored progress value (days clicked)
-  // not automatic time calculation
-  const currentDays = goal.progress; // progress field stores number of days/clicks
-  const totalDays = Math.ceil(goal.goal_time / (60 * 60 * 24)); // Convert seconds to days
-  const progressPercentage = Math.min(100, Math.round((currentDays / totalDays) * 100));
-  
-  // Check if completed today
-  const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
-  const completedToday = goal.completions?.some(date => {
-    // Normalize the date from database (could be timestamp or date string)
-    const normalizedDate = new Date(date).toISOString().split('T')[0];
-    return normalizedDate === today;
-  }) || false;
-  
-  return {
-    currentDays,
-    totalDays,
-    progress: progressPercentage,
-    isComplete: currentDays >= totalDays,
-    completedToday,
-  };
-}
