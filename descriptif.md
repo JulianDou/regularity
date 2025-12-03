@@ -76,7 +76,7 @@ On pourra, lorsqu'on complète un objectif, choisir de le rallonger (en rajoutan
 # User Stories & Developer Notes
 *Avec l'aide de copilot, modèle GPT-4.1.*
 
-This document provides detailed user stories and implementation hints for developers working on HabitTracker.
+This document provides detailed user stories and implementation hints for developers working on Regularity.
 
 ## User Authentication
 ### Story: As a user, I want to sign up and log in with a unique username and password.
@@ -150,10 +150,10 @@ This document provides detailed user stories and implementation hints for develo
 - [Prisma Docs](https://www.prisma.io/docs)
 - [TailwindCSS Docs](https://tailwindcss.com/docs)
 
-# HabitTracker
+# Regularity
 *Avec l'aide de copilot, modèle GPT-4.1.*
 
-HabitTracker is a web application designed to help users set, track, and achieve their personal goals and habits. Built with Next.js, React, and TailwindCSS, and hosted on Vercel, it offers a modern, fast, and responsive experience. Data is securely stored in a PostgreSQL database, and all interactions are handled via a client-side API.
+Regularity is a web application designed to help users set, track, and achieve their personal goals and habits. Built with Next.js, React, and TailwindCSS, and hosted on Vercel, it offers a modern, fast, and responsive experience. Data is securely stored in a PostgreSQL database, and all interactions are handled via a client-side API.
 
 ## Features
 

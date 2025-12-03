@@ -24,8 +24,8 @@ const pressStart2P = Press_Start_2P({
 });
 
 export const metadata: Metadata = {
-  title: "HabitTracker - Mes Objectifs",
-  description: "Suivez vos habitudes et objectifs quotidiens avec HabitTracker. Visualisez votre progression et restez motivé.",
+  title: "Regularity - Tracker d'habitudes",
+  description: "Suivez vos habitudes et objectifs quotidiens avec Regularity. Visualisez votre progression et restez motivé.",
 };
 
 export default async function RootLayout({

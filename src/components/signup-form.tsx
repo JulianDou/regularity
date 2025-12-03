@@ -11,7 +11,7 @@ export default function SignupForm() {
     <div className="bg-background min-h-screen flex flex-col items-center justify-center p-6">
       <div className="w-full max-w-md">
         <h1 className="text-3xl font-bold text-foreground text-center mb-8">
-          HabitTracker
+          Regularity
         </h1>
         
         <div className="generic-bordered-container">

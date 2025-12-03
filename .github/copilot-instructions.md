@@ -1,4 +1,4 @@
-# HabitTracker Project Instructions
+# Regularity Project Instructions
 
 This is a Next.js 14 habit tracking application with TypeScript, TailwindCSS, and PostgreSQL integration.
 

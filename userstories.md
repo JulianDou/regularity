@@ -1,7 +1,7 @@
 # User Stories & Developer Notes
 *Avec l'aide de copilot, modèle GPT-4.1.*
 
-This document provides detailed user stories and implementation hints for developers working on HabitTracker.
+This document provides detailed user stories and implementation hints for developers working on Regularity.
 
 ## User Authentication
 ### Story: As a user, I want to sign up and log in with a unique username and password.
