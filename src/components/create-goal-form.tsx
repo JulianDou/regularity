@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import LaunchpadIcon from "../../assets/launchpad-vector.svg";
+import IdleRocketIcon from "../../assets/rocket-idle-vector.svg";
+import RocketIcon from "../../assets/rocket-vector.svg";
 import { createGoal } from "@/app/lib/actions";
 
 export default function CreateGoalForm() {
@@ -14,6 +16,7 @@ export default function CreateGoalForm() {
   const [error, setError] = useState("");
   const [advanceDayToggle, setAdvanceDayToggle] = useState(false);
   const [advanceDay, setAdvanceDay] = useState("monday");
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,7 +44,10 @@ export default function CreateGoalForm() {
       });
 
       if (result.success) {
-        router.push("/");
+        setSubmitSuccess(true);
+        setTimeout(() => {
+          router.push("/");
+        }, 1000);
       } else {
         setError(result.error || "Une erreur est survenue");
       }
@@ -150,6 +156,14 @@ export default function CreateGoalForm() {
       {/* Illustration */}
       <div className="flex-1 flex items-end justify-center min-h-0">
         <LaunchpadIcon className="w-[120px] h-[139px] text-foreground" />
+        <IdleRocketIcon 
+          id="idle-rocket" 
+          className={`"w-[50px] h-[50px] text-foreground absolute mb-[13px] ${submitSuccess ? 'opacity-0' : 'opacity-100'}`}
+        />
+        <RocketIcon 
+          id="rocket" 
+          className={`w-[50px] h-[65px] text-foreground absolute mb-[13px] transition-transform duration-1000 ${submitSuccess ? 'opacity-100 -translate-y-[100px]' : 'opacity-0 translate-y-[18px]'}`} 
+        />
       </div>
 
       {/* Submit Button */}
