@@ -444,7 +444,7 @@ export default function GoalView({ goals }: GoalViewProps) {
                   sur {currentGoal.complete && daysSinceLastCompletion !== null ? (daysSinceStart - daysSinceLastCompletion) : daysSinceStart}
                 </p>
                 {
-                  streak > 0 &&
+                  streak > 1 &&
                   <p className={"text-success font-pixelify-sans text-xs"}>
                     vous avez complété {streak} 
                     {currentGoal.period === "days" ? " jours " : " semaines "} 
