@@ -160,7 +160,7 @@ export default function GoalView({ goals }: GoalViewProps) {
     
     // For daily goals, calculate weekdays only (Mon-Fri)
     let weekdayCount = 0;
-    const currentDate = new Date(startOfFirstWeek);
+    const currentDate = new Date(created);
     
     while (currentDate <= today) {
       const dayOfWeek = currentDate.getDay();
@@ -346,8 +346,6 @@ export default function GoalView({ goals }: GoalViewProps) {
     setShowDeleteConfirm(false);
   };
 
-  console.log(streak);
-
   return (
     <div className="bg-background flex flex-col gap-4 w-full h-full generic-bordered-container">
       {showResetConfirm && (
@@ -444,7 +442,7 @@ export default function GoalView({ goals }: GoalViewProps) {
                   sur {currentGoal.complete && daysSinceLastCompletion !== null ? (daysSinceStart - daysSinceLastCompletion) : daysSinceStart}
                 </p>
                 {
-                  streak > 1 &&
+                  streak > 1 && !currentGoal.complete &&
                   <p className={"text-success font-pixelify-sans text-xs"}>
                     vous avez complété {streak} 
                     {currentGoal.period === "days" ? " jours " : " semaines "} 

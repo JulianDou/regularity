@@ -15,7 +15,7 @@ export default function Nav({ tab = "Goals" }: NavProps) {
   const isActive = (currentTab: string) => currentTab === tab;
 
   return (
-    <nav className="flex gap-4 items-center justify-center p-2 my-2">
+    <nav className="fixed bottom-0 left-0 generic-bordered-container w-full bg-background flex gap-4 items-center justify-center">
       <button 
         className={isActive("Completed") 
           ? "border-4 border-foreground px-5 py-4" 

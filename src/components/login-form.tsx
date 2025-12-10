@@ -8,7 +8,7 @@ export default function LoginForm() {
   const [state, formAction] = useActionState(login, undefined);
 
   return (
-    <div className="bg-background min-h-screen flex flex-col items-center justify-center p-6">
+    <div className="bg-background h-full flex flex-col items-center justify-center p-6">
       <div className="w-full max-w-md">
         <h1 className="text-3xl font-bold text-foreground text-center mb-8">
           Regularity
@@ -28,7 +28,7 @@ export default function LoginForm() {
                 name="username"
                 required
                 className="input-field w-full"
-                placeholder="Entrez votre nom d'utilisateur"
+                placeholder="Nom d'utilisateur"
               />
             </div>
             
@@ -42,7 +42,7 @@ export default function LoginForm() {
                 name="password"
                 required
                 className="input-field w-full"
-                placeholder="Entrez votre mot de passe"
+                placeholder="Mot de passe"
               />
             </div>
             

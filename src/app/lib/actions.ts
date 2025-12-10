@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import postgres from "postgres";
 import { requireAuth } from './session';
+import { FriendInfo } from "./definitions";
 
 const sql = postgres(process.env.POSTGRES_URL!, { 
   ssl: 'require',
@@ -21,7 +22,7 @@ export async function advanceGoal(goalId: string) {
     `;
     
     if (goalData.length === 0) {
-      return { success: false, error: "Goal not found" };
+      return { success: false, error: "Objectif non trouvé" };
     }
     
     const goal = goalData[0];
@@ -122,7 +123,7 @@ export async function advanceGoal(goalId: string) {
     return { success: true };
   } catch (error) {
     console.error("Error advancing goal:", error);
-    return { success: false, error: "Failed to advance goal" };
+    return { success: false, error: "Échec de la validation de l'objectif" };
   }
 }
 
@@ -141,7 +142,7 @@ export async function resetGoal(goalId: string) {
     return { success: true };
   } catch (error) {
     console.error("Error resetting goal:", error);
-    return { success: false, error: "Failed to reset goal" };
+    return { success: false, error: "Échec de la réinitialisation de l'objectif" };
   }
 }
 
@@ -157,7 +158,7 @@ export async function completeGoal(goalId: string) {
     return { success: true };
   } catch (error) {
     console.error("Error completing goal:", error);
-    return { success: false, error: "Failed to complete goal" };
+    return { success: false, error: "Échec de la validation de l'objectif" };
   }
 }
 
@@ -172,7 +173,7 @@ export async function deleteGoal(goalId: string) {
     return { success: true };
   } catch (error) {
     console.error("Error deleting goal:", error);
-    return { success: false, error: "Failed to delete goal" };
+    return { success: false, error: "Échec de la suppression de l'objectif" };
   }
 }
 
@@ -188,7 +189,7 @@ export async function revertCompletion(goalId: string) {
     `;
     
     if (goalData.length === 0) {
-      return { success: false, error: "Goal not found" };
+      return { success: false, error: "Objectif non trouvé" };
     }
     
     const goal = goalData[0];
@@ -289,7 +290,7 @@ export async function revertCompletion(goalId: string) {
     return { success: true };
   } catch (error) {
     console.error("Error reverting completion:", error);
-    return { success: false, error: "Failed to revert completion" };
+    return { success: false, error: "Échec de l'annulation" };
   }
 }
 
@@ -328,6 +329,158 @@ export async function createGoal(formData: {
     return { success: true };
   } catch (error) {
     console.error("Error creating goal:", error);
-    return { success: false, error: "Failed to create goal" };
+    return { success: false, error: "Échec de la création de l'objectif" };
+  }
+}
+
+export async function findUsersByUsername(username: string, excludeFriends: boolean = false) {
+  try {
+    const user = await requireAuth();
+    
+    let userData;
+    
+    if (excludeFriends) {
+      // Get user's friends list
+      const userFriends = await sql`
+        SELECT friends
+        FROM users 
+        WHERE id = ${user.id}
+      `;
+      
+      const friendIds = userFriends[0]?.friends || [];
+      
+      // Search users excluding friends and self
+      userData = await sql`
+        SELECT username
+        FROM users 
+        WHERE username ILIKE ${'%' + username + '%'}
+          AND id != ${user.id}
+          AND NOT (id = ANY(${friendIds}))
+      `;
+    } else {
+      userData = await sql`
+        SELECT username
+        FROM users 
+        WHERE username ILIKE ${'%' + username + '%'}
+      `;
+    }
+
+    if (userData.length === 0) {
+      return { success: false, data: [], error: "Aucun utilisateur trouvé"}
+    }
+    return { success: true, data: userData };
+  } catch (error) {
+    console.error("Error finding user by username:", error);
+    return { success: false, data: [], error: "Une erreur est survenue" };
+  }
+}
+
+export async function addFriend(friendUsername: string) {
+  try {
+    const user = await requireAuth();
+
+    const userFriends = await sql`
+      SELECT friends
+      FROM users 
+      WHERE id = ${user.id}
+    `;
+    
+    // Find the friend's user ID by username
+    const friendData = await sql`
+      SELECT id FROM users WHERE username = ${friendUsername}
+    `;
+    
+    if (friendData.length === 0) {
+      return { success: false, error: "Utilisateur non trouvé" };
+    }
+    
+    const friendId = friendData[0].id;
+    
+    // Cannot add yourself as a friend
+    if (friendId === user.id) {
+      return { success: false, error: "Vous ne pouvez pas vous ajouter en tant qu'ami" };
+    }
+
+    if (userFriends && userFriends[0].friends.includes(friendId)) {
+      return { success: false, error: "Cet utilisateur est déjà votre ami" };
+    }
+    
+    // Add friend to the user's friends array (if not already present)
+    await sql`
+      UPDATE users 
+      SET friends = array_append(friends, ${friendId})
+      WHERE id = ${user.id}
+        AND NOT (${friendId} = ANY(COALESCE(friends, '{}')))
+    `;
+    
+    revalidatePath('/profile');
+    return { success: true };
+  } catch (error) {
+    console.error("Error adding friend:", error);
+    return { success: false, error: "Erreur lors de l'ajout de l'ami" };
+  }
+}
+
+export async function removeFriend(friendId: string) {
+  try {
+    const user = await requireAuth();
+    
+    await sql`
+      UPDATE users 
+      SET friends = array_remove(friends, ${friendId})
+      WHERE id = ${user.id}
+    `;
+    
+    revalidatePath('/profile');
+    return { success: true };
+  } catch (error) {
+    console.error("Error removing friend:", error);
+    return { success: false, error: "Failed to remove friend" };
+  }
+}
+
+export async function fetchFriendsList() {
+  try {
+    const user = await requireAuth();
+
+    // Fetch the current user's friends array
+    const userData = await sql`
+      SELECT id, username, COALESCE(friends, '{}') as friends
+      FROM users 
+      WHERE id = ${user.id}
+    `;
+
+    if (userData.length === 0) {
+      return [];
+    }
+
+    const currentUser = userData[0];
+
+    const friendIds: string[] = currentUser.friends || [];
+
+    if (friendIds.length === 0) {
+      return [];
+    }
+
+    // Fetch friend details and their friends arrays to determine mutual status
+    const friendsData = await sql`
+      SELECT id, username, COALESCE(friends, '{}') as friends
+      FROM users
+      WHERE id = ANY(${friendIds})
+    `;
+
+    // Build friends list with mutual status
+    const friendsWithMutual: FriendInfo[] = friendsData.map((friend) => ({
+      id: friend.id,
+      username: friend.username,
+
+      // Mutual if the friend also has the current user in their friends array
+      mutual: (friend.friends || []).includes(currentUser.id)
+    }));
+
+    return friendsWithMutual;
+  } catch (error) {
+    console.error("Error fetching friends list:", error);
+    return [];
   }
 }
