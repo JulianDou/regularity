@@ -1,9 +1,13 @@
 import Nav from "@/components/nav";
 import { getSession } from "@/app/lib/session";
 import { logout } from "@/app/lib/auth";
+import CaptainFinder from "@/components/captain-finder";
+import FriendsList from "@/components/friends-list";
 
 export default async function ProfilePage() {
   const user = await getSession();
+
+  console.log(user);
 
   return (
     <div className="bg-background flex flex-col  w-full h-full">
@@ -19,6 +23,8 @@ export default async function ProfilePage() {
             <p className="label-text">Nom du capitaine</p>
             <p className="text-foreground text-lg">{user?.username}</p>
           </div>
+          <CaptainFinder />
+          <FriendsList />
         </div>
           
         {/* Action buttons */}

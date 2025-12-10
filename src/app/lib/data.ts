@@ -1,6 +1,8 @@
 import postgres from "postgres";
 import {
-  Goal
+  Goal,
+  FriendInfo,
+  UserProfile
 } from './definitions';
 import { requireAuth } from './session';
 
@@ -62,5 +64,57 @@ export async function fetchInfiniteGoals() {
   } catch (error) {
     console.error("Error fetching infinite goals:", error);
     return [];
+  }
+}
+
+export async function fetchUserProfile(): Promise<UserProfile | null> {
+  try {
+    const user = await requireAuth();
+    
+    // Fetch the current user's friends array
+    const userData = await sql`
+      SELECT id, username, COALESCE(friends, '{}') as friends
+      FROM users 
+      WHERE id = ${user.id}
+    `;
+    
+    if (userData.length === 0) {
+      return null;
+    }
+    
+    const currentUser = userData[0];
+    const friendIds: string[] = currentUser.friends || [];
+    
+    if (friendIds.length === 0) {
+      return {
+        id: currentUser.id,
+        username: currentUser.username,
+        friends: []
+      };
+    }
+    
+    // Fetch friend details and their friends arrays to determine mutual status
+    const friendsData = await sql`
+      SELECT id, username, COALESCE(friends, '{}') as friends
+      FROM users 
+      WHERE id = ANY(${friendIds})
+    `;
+    
+    // Build friends list with mutual status
+    const friendsWithMutual: FriendInfo[] = friendsData.map((friend) => ({
+      id: friend.id,
+      username: friend.username,
+      // Mutual if the friend also has the current user in their friends array
+      mutual: (friend.friends || []).includes(currentUser.id)
+    }));
+    
+    return {
+      id: currentUser.id,
+      username: currentUser.username,
+      friends: friendsWithMutual
+    };
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    return null;
   }
 }

@@ -2,6 +2,21 @@ export type User = {
   id: string;
   username: string;
   pwd_hash: string;
+  friends: string[]; // Array of user IDs
+}
+
+// Friend info returned when fetching profile data
+export type FriendInfo = {
+  id: string;
+  username: string;
+  mutual: boolean; // True if the friendship is reciprocal
+}
+
+// User profile with computed friend information
+export type UserProfile = {
+  id: string;
+  username: string;
+  friends: FriendInfo[];
 }
 
 export type Goal = {

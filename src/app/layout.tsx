@@ -40,12 +40,14 @@ export default async function RootLayout({
       <body
         className={`${inter.variable} ${pixelifySans.variable} ${pressStart2P.variable} antialiased h-full font-press-start-2p`}
       >
-        <div className="flex-1 overflow-hidden h-full generic-bordered-container">
+        <div className="flex flex-col h-full p-4 border-2 border-foreground bg-background text-foreground pb-28">
           {
             user &&
-            <p className="text-xs text-intermediate">Utilisateur <span className="text-foreground">{user?.username}</span> connecté</p>
+            <p className="text-xs text-intermediate mb-2">Utilisateur <span className="text-foreground">{user?.username}</span> connecté</p>
           }
-          {children}
+          <div className="flex flex-col grow overflow-y-scroll">
+            {children}
+          </div>
         </div>
       </body>
     </html>
